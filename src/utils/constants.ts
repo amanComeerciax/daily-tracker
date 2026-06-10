@@ -1,0 +1,245 @@
+import { ExpenseCategory, IncomeSource } from "@/types";
+
+// Currency configuration
+export const CURRENCY_SYMBOL = "₹";
+export const CURRENCY_CODE = "INR";
+export const CURRENCY_LOCALE = "en-IN";
+
+// Expense categories with metadata
+export const EXPENSE_CATEGORIES: {
+  value: ExpenseCategory;
+  label: string;
+  icon: string;
+  color: string;
+}[] = [
+  { value: "Food", label: "Food", icon: "🍔", color: "#f97316" },
+  { value: "Travel", label: "Travel", icon: "✈️", color: "#3b82f6" },
+  { value: "Shopping", label: "Shopping", icon: "🛍️", color: "#ec4899" },
+  { value: "Bills", label: "Bills", icon: "📄", color: "#eab308" },
+  { value: "Entertainment", label: "Entertainment", icon: "🎬", color: "#8b5cf6" },
+  { value: "Health", label: "Health", icon: "💊", color: "#10b981" },
+  { value: "Education", label: "Education", icon: "📚", color: "#06b6d4" },
+  { value: "Other", label: "Other", icon: "📦", color: "#6b7280" },
+];
+
+// Income sources
+export const INCOME_SOURCES: { value: IncomeSource; label: string }[] = [
+  { value: "Salary", label: "Salary" },
+  { value: "Freelancing", label: "Freelancing" },
+  { value: "Business", label: "Business" },
+  { value: "Bonus", label: "Bonus" },
+  { value: "Other", label: "Other" },
+];
+
+// Category color map for charts
+export const CATEGORY_COLORS: Record<ExpenseCategory, string> = {
+  Food: "#f97316",
+  Travel: "#3b82f6",
+  Shopping: "#ec4899",
+  Bills: "#eab308",
+  Entertainment: "#8b5cf6",
+  Health: "#10b981",
+  Education: "#06b6d4",
+  Other: "#6b7280",
+};
+
+// Keyword-to-category mapping for AI-like auto-categorization
+export const CATEGORY_KEYWORDS: Record<string, ExpenseCategory> = {
+  // Food
+  lunch: "Food",
+  dinner: "Food",
+  breakfast: "Food",
+  coffee: "Food",
+  tea: "Food",
+  snack: "Food",
+  restaurant: "Food",
+  food: "Food",
+  pizza: "Food",
+  burger: "Food",
+  biryani: "Food",
+  thali: "Food",
+  meal: "Food",
+  eat: "Food",
+  drink: "Food",
+  juice: "Food",
+  sweets: "Food",
+  cake: "Food",
+  groceries: "Food",
+  grocery: "Food",
+  vegetables: "Food",
+  fruits: "Food",
+  milk: "Food",
+  bread: "Food",
+  rice: "Food",
+  chicken: "Food",
+  mutton: "Food",
+  fish: "Food",
+  egg: "Food",
+  dal: "Food",
+  roti: "Food",
+  noodles: "Food",
+  pasta: "Food",
+  ice: "Food",
+  cream: "Food",
+  chocolate: "Food",
+  chips: "Food",
+  biscuit: "Food",
+  samosa: "Food",
+  chai: "Food",
+  water: "Food",
+  soda: "Food",
+
+  // Travel
+  petrol: "Travel",
+  diesel: "Travel",
+  fuel: "Travel",
+  uber: "Travel",
+  ola: "Travel",
+  cab: "Travel",
+  taxi: "Travel",
+  bus: "Travel",
+  train: "Travel",
+  flight: "Travel",
+  metro: "Travel",
+  auto: "Travel",
+  parking: "Travel",
+  toll: "Travel",
+  travel: "Travel",
+  trip: "Travel",
+  hotel: "Travel",
+  airfare: "Travel",
+  ticket: "Travel",
+  commute: "Travel",
+  gas: "Travel",
+  fare: "Travel",
+
+  // Shopping
+  clothes: "Shopping",
+  shoes: "Shopping",
+  amazon: "Shopping",
+  flipkart: "Shopping",
+  myntra: "Shopping",
+  shopping: "Shopping",
+  dress: "Shopping",
+  shirt: "Shopping",
+  jeans: "Shopping",
+  bag: "Shopping",
+  watch: "Shopping",
+  jewelry: "Shopping",
+  accessory: "Shopping",
+  gift: "Shopping",
+  electronics: "Shopping",
+  gadget: "Shopping",
+  phone: "Shopping",
+  laptop: "Shopping",
+  headphones: "Shopping",
+
+  // Bills
+  electricity: "Bills",
+  electric: "Bills",
+  rent: "Bills",
+  internet: "Bills",
+  wifi: "Bills",
+  broadband: "Bills",
+  mobile: "Bills",
+  recharge: "Bills",
+  bill: "Bills",
+  bills: "Bills",
+  insurance: "Bills",
+  emi: "Bills",
+  loan: "Bills",
+  subscription: "Bills",
+  netflix: "Bills",
+  spotify: "Bills",
+  prime: "Bills",
+  gas_bill: "Bills",
+  maintenance: "Bills",
+  tax: "Bills",
+  water_bill: "Bills",
+
+  // Entertainment
+  movie: "Entertainment",
+  movies: "Entertainment",
+  cinema: "Entertainment",
+  concert: "Entertainment",
+  game: "Entertainment",
+  gaming: "Entertainment",
+  sports: "Entertainment",
+  party: "Entertainment",
+  pub: "Entertainment",
+  bar: "Entertainment",
+  club: "Entertainment",
+  entertainment: "Entertainment",
+  fun: "Entertainment",
+  outing: "Entertainment",
+  picnic: "Entertainment",
+  park: "Entertainment",
+  museum: "Entertainment",
+
+  // Health
+  medicine: "Health",
+  doctor: "Health",
+  hospital: "Health",
+  health: "Health",
+  pharmacy: "Health",
+  gym: "Health",
+  fitness: "Health",
+  yoga: "Health",
+  dental: "Health",
+  eye: "Health",
+  clinic: "Health",
+  checkup: "Health",
+  surgery: "Health",
+  lab: "Health",
+  test: "Health",
+  vitamin: "Health",
+  supplement: "Health",
+
+  // Education
+  book: "Education",
+  books: "Education",
+  course: "Education",
+  class: "Education",
+  tuition: "Education",
+  coaching: "Education",
+  exam: "Education",
+  study: "Education",
+  education: "Education",
+  school: "Education",
+  college: "Education",
+  university: "Education",
+  library: "Education",
+  stationery: "Education",
+  pen: "Education",
+  notebook: "Education",
+  udemy: "Education",
+  coursera: "Education",
+  tutorial: "Education",
+};
+
+// Navigation items for dashboard sidebar
+export const DASHBOARD_NAV_ITEMS = [
+  { href: "/dashboard", label: "Dashboard", icon: "LayoutDashboard" },
+  { href: "/dashboard/expenses", label: "Expenses", icon: "Receipt" },
+  { href: "/dashboard/income", label: "Income", icon: "TrendingUp" },
+  { href: "/dashboard/daily", label: "Daily View", icon: "Calendar" },
+  { href: "/dashboard/budget", label: "Budget", icon: "PiggyBank" },
+  { href: "/dashboard/analytics", label: "Analytics", icon: "BarChart3" },
+  { href: "/dashboard/export", label: "Export", icon: "Download" },
+] as const;
+
+// Month names
+export const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
