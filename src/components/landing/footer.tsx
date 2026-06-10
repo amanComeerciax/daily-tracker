@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Wallet, Mail, ArrowUpRight } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -11,10 +11,12 @@ export const Footer: React.FC = () => {
           {/* Logo & Description (4 cols) */}
           <div className="md:col-span-5 flex flex-col items-start">
             <Link href="/" className="flex items-center gap-2.5 group mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-bg shadow-sm group-hover:shadow-md transition-shadow">
-                <Wallet className="h-4 w-4 text-white" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-black">
+              <img
+                src="/logo.png"
+                alt="FinanceFlow Logo"
+                className="h-16 w-16 object-contain transition-transform group-hover:scale-105 duration-200"
+              />
+              <span className="text-3xl font-extrabold tracking-tight text-black">
                 Finance<span className="gradient-text">Flow</span>
               </span>
             </Link>

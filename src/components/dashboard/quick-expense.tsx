@@ -13,11 +13,12 @@ import { toast } from "sonner";
 export function QuickExpense() {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
+  const [date, setDate] = useState(formatDateForInput(new Date()));
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount.trim() || !description.trim()) return;
+    if (!amount.trim() || !description.trim() || !date) return;
 
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
@@ -35,7 +36,7 @@ export function QuickExpense() {
       amount: parsedAmount,
       category: category,
       description: capitalizedDesc,
-      date: formatDateForInput(new Date()),
+      date: date,
     });
 
     setLoading(false);
@@ -45,6 +46,7 @@ export function QuickExpense() {
       
       setAmount("");
       setDescription("");
+      setDate(formatDateForInput(new Date()));
 
       // Check budget status for alerts
       const budgetStatusResult = await getBudgetStatus();
@@ -84,6 +86,17 @@ export function QuickExpense() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder='e.g. "Lunch" or "Petrol"'
+            className="h-12 text-lg"
+            disabled={loading}
+            required
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium mb-1.5 block text-muted-foreground">Date</label>
+          <Input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             className="h-12 text-lg"
             disabled={loading}
             required

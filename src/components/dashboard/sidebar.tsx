@@ -14,7 +14,6 @@ import {
   PiggyBank,
   BarChart3,
   Download,
-  Wallet,
   Menu,
   X,
   Plus,
@@ -48,10 +47,12 @@ export function Sidebar() {
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md gradient-bg">
-              <Wallet className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-bold text-sm">
+            <img
+              src="/logo.png"
+              alt="FinanceFlow Logo"
+              className="h-10 w-10 object-contain"
+            />
+            <span className="font-bold text-lg">
               Finance<span className="gradient-text">Flow</span>
             </span>
           </Link>
@@ -80,10 +81,12 @@ export function Sidebar() {
         {/* Logo */}
         <div className="flex h-16 items-center gap-2.5 px-6 border-b border-sidebar-border">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-bg shadow-sm group-hover:shadow-md transition-shadow">
-              <Wallet className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-lg font-bold tracking-tight">
+            <img
+              src="/logo.png"
+              alt="FinanceFlow Logo"
+              className="h-12 w-12 object-contain transition-transform group-hover:scale-105 duration-200"
+            />
+            <span className="text-2xl font-extrabold tracking-tight">
               Finance<span className="gradient-text">Flow</span>
             </span>
           </Link>

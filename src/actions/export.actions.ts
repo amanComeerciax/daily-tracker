@@ -294,3 +294,112 @@ export async function exportFullHistory(): Promise<ActionResponse<string>> {
     return { success: false, error: "Failed to export full history" };
   }
 }
+
+/**
+ * Get daily report data for PDF generation
+ */
+export async function getDailyReportData(
+  dateStr: string
+): Promise<ActionResponse<{ expenses: any[]; dateStr: string }>> {
+  try {
+    const { userId } = await auth();
+    if (!userId) return { success: false, error: "Unauthorized" };
+
+    await dbConnect();
+
+    const date = new Date(dateStr);
+    const expenses = await Expense.find({
+      clerkId: userId,
+      date: { $gte: startOfDay(date), $lte: endOfDay(date) },
+    })
+      .sort({ date: -1 })
+      .lean();
+
+    return {
+      success: true,
+      data: {
+        expenses: JSON.parse(JSON.stringify(expenses)),
+        dateStr,
+      },
+    };
+  } catch (error) {
+    console.error("Error getting daily report data:", error);
+    return { success: false, error: "Failed to get daily report data" };
+  }
+}
+
+/**
+ * Get monthly report data for PDF generation
+ */
+export async function getMonthlyReportData(
+  month: number,
+  year: number
+): Promise<ActionResponse<{ expenses: any[]; incomes: any[]; month: number; year: number }>> {
+  try {
+    const { userId } = await auth();
+    if (!userId) return { success: false, error: "Unauthorized" };
+
+    await dbConnect();
+
+    const start = startOfMonth(new Date(year, month - 1));
+    const end = endOfMonth(new Date(year, month - 1));
+
+    const [expenses, incomes] = await Promise.all([
+      Expense.find({
+        clerkId: userId,
+        date: { $gte: start, $lte: end },
+      })
+        .sort({ date: -1 })
+        .lean(),
+      Income.find({
+        clerkId: userId,
+        date: { $gte: start, $lte: end },
+      })
+        .sort({ date: -1 })
+        .lean(),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        expenses: JSON.parse(JSON.stringify(expenses)),
+        incomes: JSON.parse(JSON.stringify(incomes)),
+        month,
+        year,
+      },
+    };
+  } catch (error) {
+    console.error("Error getting monthly report data:", error);
+    return { success: false, error: "Failed to get monthly report data" };
+  }
+}
+
+/**
+ * Get full history data for PDF generation
+ */
+export async function getFullReportData(): Promise<
+  ActionResponse<{ expenses: any[]; incomes: any[] }>
+> {
+  try {
+    const { userId } = await auth();
+    if (!userId) return { success: false, error: "Unauthorized" };
+
+    await dbConnect();
+
+    const [expenses, incomes] = await Promise.all([
+      Expense.find({ clerkId: userId }).sort({ date: -1 }).lean(),
+      Income.find({ clerkId: userId }).sort({ date: -1 }).lean(),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        expenses: JSON.parse(JSON.stringify(expenses)),
+        incomes: JSON.parse(JSON.stringify(incomes)),
+      },
+    };
+  } catch (error) {
+    console.error("Error getting full report data:", error);
+    return { success: false, error: "Failed to get full report data" };
+  }
+}

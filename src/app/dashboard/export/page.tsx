@@ -1,12 +1,15 @@
 "use client";
-
+ 
 import { useState } from "react";
 import {
   exportDailyReport,
   exportMonthlyReport,
   exportFullHistory,
+  getDailyReportData,
+  getMonthlyReportData,
+  getFullReportData,
 } from "@/actions/export.actions";
-import { downloadExcel } from "@/utils/export";
+import { downloadExcel, downloadPDF } from "@/utils/export";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +24,7 @@ import {
   History,
   Loader2,
   FileSpreadsheet,
+  FileText,
 } from "lucide-react";
 
 export default function ExportPage() {
@@ -32,6 +36,10 @@ export default function ExportPage() {
   const [loadingMonthly, setLoadingMonthly] = useState(false);
   const [loadingFull, setLoadingFull] = useState(false);
 
+  const [loadingDailyPdf, setLoadingDailyPdf] = useState(false);
+  const [loadingMonthlyPdf, setLoadingMonthlyPdf] = useState(false);
+  const [loadingFullPdf, setLoadingFullPdf] = useState(false);
+
   const handleDailyExport = async () => {
     setLoadingDaily(true);
     const result = await exportDailyReport(dailyDate);
@@ -39,6 +47,15 @@ export default function ExportPage() {
       downloadExcel(result.data, `daily-report-${dailyDate}`);
     }
     setLoadingDaily(false);
+  };
+
+  const handleDailyPdfExport = async () => {
+    setLoadingDailyPdf(true);
+    const result = await getDailyReportData(dailyDate);
+    if (result.success && result.data) {
+      downloadPDF(`Daily Report - ${dailyDate}`, "daily", result.data);
+    }
+    setLoadingDailyPdf(false);
   };
 
   const handleMonthlyExport = async () => {
@@ -54,6 +71,20 @@ export default function ExportPage() {
     setLoadingMonthly(false);
   };
 
+  const handleMonthlyPdfExport = async () => {
+    setLoadingMonthlyPdf(true);
+    const [year, month] = monthlyMonth.split("-").map(Number);
+    const result = await getMonthlyReportData(month, year);
+    if (result.success && result.data) {
+      downloadPDF(
+        `Monthly Report - ${MONTH_NAMES[month - 1]} ${year}`,
+        "monthly",
+        result.data
+      );
+    }
+    setLoadingMonthlyPdf(false);
+  };
+
   const handleFullExport = async () => {
     setLoadingFull(true);
     const result = await exportFullHistory();
@@ -63,11 +94,20 @@ export default function ExportPage() {
     setLoadingFull(false);
   };
 
+  const handleFullPdfExport = async () => {
+    setLoadingFullPdf(true);
+    const result = await getFullReportData();
+    if (result.success && result.data) {
+      downloadPDF("Full Financial History Report", "full", result.data);
+    }
+    setLoadingFullPdf(false);
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Export"
-        description="Download your financial data as Excel files"
+        description="Download your financial data as Excel or PDF files"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -95,18 +135,33 @@ export default function ExportPage() {
                 onChange={(e) => setDailyDate(e.target.value)}
               />
             </div>
-            <Button
-              onClick={handleDailyExport}
-              className="w-full gap-2"
-              disabled={loadingDaily}
-            >
-              {loadingDaily ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Download className="h-4 w-4" />
-              )}
-              Download .xlsx
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2.5">
+              <Button
+                onClick={handleDailyExport}
+                className="flex-1 gap-1.5 text-xs"
+                disabled={loadingDaily || loadingDailyPdf}
+              >
+                {loadingDaily ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Download className="h-3.5 w-3.5" />
+                )}
+                Excel (.xlsx)
+              </Button>
+              <Button
+                onClick={handleDailyPdfExport}
+                variant="outline"
+                className="flex-1 gap-1.5 text-xs border-red-200 text-red-600 hover:border-red-500 hover:bg-red-50/50"
+                disabled={loadingDaily || loadingDailyPdf}
+              >
+                {loadingDailyPdf ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <FileText className="h-3.5 w-3.5" />
+                )}
+                PDF (.pdf)
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
@@ -134,18 +189,33 @@ export default function ExportPage() {
                 onChange={(e) => setMonthlyMonth(e.target.value)}
               />
             </div>
-            <Button
-              onClick={handleMonthlyExport}
-              className="w-full gap-2"
-              disabled={loadingMonthly}
-            >
-              {loadingMonthly ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Download className="h-4 w-4" />
-              )}
-              Download .xlsx
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2.5">
+              <Button
+                onClick={handleMonthlyExport}
+                className="flex-1 gap-1.5 text-xs"
+                disabled={loadingMonthly || loadingMonthlyPdf}
+              >
+                {loadingMonthly ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Download className="h-3.5 w-3.5" />
+                )}
+                Excel (.xlsx)
+              </Button>
+              <Button
+                onClick={handleMonthlyPdfExport}
+                variant="outline"
+                className="flex-1 gap-1.5 text-xs border-red-200 text-red-600 hover:border-red-500 hover:bg-red-50/50"
+                disabled={loadingMonthly || loadingMonthlyPdf}
+              >
+                {loadingMonthlyPdf ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <FileText className="h-3.5 w-3.5" />
+                )}
+                PDF (.pdf)
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
@@ -169,18 +239,33 @@ export default function ExportPage() {
               <FileSpreadsheet className="h-4 w-4" />
               Includes all expenses & income
             </div>
-            <Button
-              onClick={handleFullExport}
-              className="w-full gap-2"
-              disabled={loadingFull}
-            >
-              {loadingFull ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Download className="h-4 w-4" />
-              )}
-              Download .xlsx
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2.5">
+              <Button
+                onClick={handleFullExport}
+                className="flex-1 gap-1.5 text-xs"
+                disabled={loadingFull || loadingFullPdf}
+              >
+                {loadingFull ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Download className="h-3.5 w-3.5" />
+                )}
+                Excel (.xlsx)
+              </Button>
+              <Button
+                onClick={handleFullPdfExport}
+                variant="outline"
+                className="flex-1 gap-1.5 text-xs border-red-200 text-red-600 hover:border-red-500 hover:bg-red-50/50"
+                disabled={loadingFull || loadingFullPdf}
+              >
+                {loadingFullPdf ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <FileText className="h-3.5 w-3.5" />
+                )}
+                PDF (.pdf)
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
